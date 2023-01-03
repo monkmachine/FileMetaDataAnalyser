@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.SQLException;
 
+import org.dsc.main.tikaMeta;
+
 public class jsonReader {
 
     JsonFactory jfactory = JsonFactory.builder()
@@ -57,6 +59,7 @@ public class jsonReader {
 
             }
             pg.commit();
+            
         }
     }
 

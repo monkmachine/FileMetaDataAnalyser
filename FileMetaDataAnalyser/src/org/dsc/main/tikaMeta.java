@@ -44,6 +44,7 @@ public class tikaMeta extends JFrame {
 	private JFileChooser chooser;
 	private String choosertitle;
 	private postGres pg;
+	private JLabel lbDBText;
 
 	/**
 	 * Launch the application.
@@ -51,7 +52,7 @@ public class tikaMeta extends JFrame {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
-		final String[] cmd = { "java", "-jar", "G:\\Tika\\tika-server-standard-2.6.0.jar" };
+		final String[] cmd = { "java", "-jar", "G:\\Tika\\tika-server-standard-2.6.0.jar","-c","G:\\Tika\\tika-server-config-default.xml" };
 		final Process process = Runtime.getRuntime().exec(cmd);
 		Runnable runnable = new Runnable() {
 			public void run() {
@@ -75,6 +76,9 @@ public class tikaMeta extends JFrame {
 				}
 			}
 		});
+	}
+	public String getlbDBText() {
+		return lbDBText.getText();
 	}
 
 	/**
@@ -124,7 +128,7 @@ public class tikaMeta extends JFrame {
 		contentPane.add(dbPanel);
 		dbPanel.setLayout(null);
 
-		JLabel lbDBText = new JLabel("Database Connection");
+		lbDBText = new JLabel("Database Connection");
 		lbDBText.setBounds(10, 11, 128, 14);
 		dbPanel.add(lbDBText);
 
@@ -194,6 +198,7 @@ public class tikaMeta extends JFrame {
 		InFolderBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				chooser = new JFileChooser();
+				
 				chooser.setCurrentDirectory(FileSystemView.getFileSystemView().getHomeDirectory());
 				chooser.setDialogTitle(choosertitle);
 				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -280,7 +285,7 @@ public class tikaMeta extends JFrame {
 							return;
 						}
 						try {
-							rmp.run(pg);
+							rmp.run(pg, lblRun);
 						} catch (IOException | InterruptedException e1) {
 							// TODO Auto-generated catch block
 							lblRun.setText("<html>" + e1.getCause() + "</html>");
@@ -288,9 +293,11 @@ public class tikaMeta extends JFrame {
 						} catch (ClassNotFoundException e) {
 							// TODO Auto-generated catch block
 							lblRun.setText("<html>" + e.getCause() + "</html>");
+							return;
 						} catch (SQLException e) {
 							// TODO Auto-generated catch block
 							lblRun.setText("<html>" + e.getCause() + "</html>");
+							return;
 						}
 						lblRun.setText("<html>Process Completed</html>");
 					}

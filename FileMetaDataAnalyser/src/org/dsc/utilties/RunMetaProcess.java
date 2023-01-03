@@ -8,6 +8,8 @@ import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Set;
 
+import javax.swing.JLabel;
+
 public class RunMetaProcess {
 
 	private String inFolder;
@@ -31,7 +33,7 @@ public class RunMetaProcess {
 	}
 
 
-	public void run(postGres pg) throws IOException, InterruptedException, SQLException, ClassNotFoundException {
+	public void run(postGres pg, JLabel lblRun) throws IOException, InterruptedException, SQLException, ClassNotFoundException {
 	
 		jsonReader jsonRead = new jsonReader();
 		jsonRead.setPg(pg);
@@ -40,7 +42,9 @@ public class RunMetaProcess {
 		fileList = fp.listFilesUsingFilesList(inFolder);
 		tikaRequest tr = new tikaRequest();
 		tr.setServiceUrl("http://localhost:9998/meta");
+		int counter = 0;
 		for (File fl : fileList) {
+			counter = counter + 1;
 			tr.setUploadFile(fl.getAbsolutePath());
 			InputStream resp = null;
 			resp = tr.tikaRequest();
@@ -50,6 +54,7 @@ public class RunMetaProcess {
 			mdr.writeMetaDataFile(resp);
 			File metaFile = new File (outFolder+"/"+fl.getName()+".meta");
 			jsonRead.processMetaFile(metaFile);
+			lblRun.setText("Processed : "+ counter +" Files" );
 		}
 		jsonRead.closeConnection();
 	}

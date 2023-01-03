@@ -27,12 +27,14 @@ public class tikaRequest {
 
 
     public InputStream tikaRequest() throws IOException, InterruptedException {
+    	System.out.println(UploadFile);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(serviceUrl))
                 .header("Accept","application/json")
                 .PUT(HttpRequest.BodyPublishers.ofFile(Paths.get(UploadFile)))
                 .build();
         HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
+        System.out.println(response.statusCode());
         return response.body();
     }
 }
